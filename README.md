@@ -3,6 +3,13 @@
 
 ## Prerequisites
 
+The Insta360 SDK is NOT included in this repository.
+You must obtain it directly from Insta360 and comply with their license.
+
+Apply for the SDK at the [Insta360 Developer page](https://www.insta360.com/developer/home).
+
+This project is not affiliated with or endorsed by Insta360.
+
 You need the following installed:
 
 - CMake
