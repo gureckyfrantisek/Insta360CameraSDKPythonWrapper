@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(pybind_example)
+project(Insta360SDKWrapper)
 
 include(FetchContent)
 
@@ -11,4 +11,30 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(pybind11)
 
-pybind11_add_module(module_name wrapper.cpp)
+# SDK paths
+set(SDK_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/sdk/include)
+set(SDK_LIB_DIR ${CMAKE_SOURCE_DIR}/sdk/lib)
+
+find_library(CAMERA_SDK_LIB
+    NAMES CameraSDK
+    PATHS ${SDK_LIB_DIR}
+    NO_DEFAULT_PATH
+)
+
+# Output module
+pybind11_add_module(insta360 wrapper.cpp)
+
+# Headers target
+target_include_directories(insta360 PRIVATE
+    ${SDK_INCLUDE_DIR}
+)
+
+# Libraries target
+target_link_directories(insta360 PRIVATE
+    ${SDK_LIB_DIR}
+)
+
+target_link_libraries(insta360 PRIVATE
+    pybind11::module
+    ${CAMERA_SDK_LIB}
+)

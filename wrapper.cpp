@@ -1,42 +1,60 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <camera/camera.h>
+#include <camera/device_discovery.h>
+#include <camera/ins_types.h>
+
 namespace py = pybind11;
+using namespace ins_camera;
 
-float sum_two_nums(float arg1, float arg2) {
-    return arg1 + arg2;
-}
+PYBIND11_MODULE(insta360, m) {
+    m.doc() = "Insta360 SDK Python bindings";
 
-class ClassName {
-    float multiplier;
+    // Enums
+    py::enum_<CameraType>(m, "CameraType")
+        .value("Insta360OneX", CameraType::Insta360OneX)
+        .value("Insta360OneR", CameraType::Insta360OneR)
+        .value("Insta360OneRS", CameraType::Insta360OneRS)
+        .value("Insta360OneX2", CameraType::Insta360OneX2)
+        .value("Insta360X3", CameraType::Insta360X3)
+        .value("Insta360X4", CameraType::Insta360X4)
+        .value("Insta360X5", CameraType::Insta360X5)
+        .value("Insta360X4Air", CameraType::Insta360X4Air)
+        .value("Unknown", CameraType::Unknown);
 
-    public:
-        ClassName(float multiplier_) : multiplier(multiplier_) {};
-        float multiply(float input) {
-            return multiplier * input;
-        };
+    // Structs
+    py::class_<DeviceConnectionInfo>(m, "DeviceConnectionInfo")
+        .def(py::init<>())
+        .def_readwrite("connection_type", &DeviceConnectionInfo::connection_type);
 
-        std::vector<float> multiply_list(std::vector<float> items) {
-            for (auto i = 0; i < items.size(); i++) {
+    py::class_<DeviceDescriptor>(m, "DeviceDescriptor")
+        .def(py::init<>())
+        .def_readwrite("camera_type", &DeviceDescriptor::camera_type)
+        .def_readwrite("serial_number", &DeviceDescriptor::serial_number)
+        .def_readwrite("camera_name", &DeviceDescriptor::camera_name)
+        .def_readwrite("fw_version", &DeviceDescriptor::fw_version)
+        .def_readwrite("info", &DeviceDescriptor::info);
 
-                items[i] = multiply(items.at(i));
-            
-            }
-            
-            return items;
-        };
-};
+    // MediaUrl
+    py::class_<MediaUrl>(m, "MediaUrl")
+        .def("empty", &MediaUrl::Empty)
+        .def("is_single_origin", &MediaUrl::IsSingleOrigin)
+        .def("get_single_origin", &MediaUrl::GetSingleOrigin)
+        .def("origin_urls", &MediaUrl::OriginUrls);
 
-// Change module_name to whatever the file is called, so better to be library here
-PYBIND11_MODULE(module_name, handle) {
-    handle.doc() = "Returns a sum of two given float numbers.";
-    handle.def("python_sum_two_nums", &sum_two_nums);
+    // DeviceDiscovery
+    py::class_<DeviceDiscovery>(m, "DeviceDiscovery")
+        .def(py::init<>())
+        .def("get_available_devices", &DeviceDiscovery::GetAvailableDevices);
 
-    py::class_<ClassName>(
-        handle, "PyClassName"
-    )
-    .def(py::init<float>())
-    .def("multiply", &ClassName::multiply)
-    .def("multiply_list", &ClassName::multiply_list)
-    ;
+    // Camera
+    py::class_<Camera, std::shared_ptr<Camera>>(m, "Camera")
+        .def(py::init<const DeviceConnectionInfo&>())
+        .def("open", &Camera::Open)
+        .def("close", &Camera::Close)
+        .def("start_recording", &Camera::StartRecording)
+        .def("stop_recording", &Camera::StopRecording)
+        .def("get_camera_files_list", &Camera::GetCameraFilesList)
+        .def("is_connected", &Camera::IsConnected);
 }
