@@ -2,6 +2,13 @@ import build.insta360 as insta360
 import time
 import os
 
+# This example shows an example workflow
+# 1. connects to the first camera it discovers
+# 2. opens it and starts recording
+# 3. after 3 seconds ends the recording
+# 4. gives you the option to downloaded the new files
+# (5.) if you choose to do so, it downloads them to data_dir and removes them from the camera
+
 def progress(current, total):
     """Callback function for the download progress"""
     percent = (current / total) * 100
