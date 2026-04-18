@@ -58,5 +58,6 @@ PYBIND11_MODULE(insta360, m) {
         .def("stop_recording", &Camera::StopRecording)
         .def("get_camera_files_list", &Camera::GetCameraFilesList)
         .def("is_connected", &Camera::IsConnected)
-        .def("download_file", &Camera::DownloadCameraFile);
+        .def("download_file", &Camera::DownloadCameraFile)
+        .def("delete_file", &Camera::DeleteCameraFile);
 }

@@ -45,7 +45,12 @@ if devices:
             local_file = os.path.join(data_dir, file_name)
 
             cam.download_file(file, local_file, progress)
-    
+
+            # Cleanup after a succesfull download
+            # Note: doesn't give feedback by itself
+            cam.delete_file(file)
+            print(f"File removed from the camera: {file}")
+
     cam.close()
 
 else:
