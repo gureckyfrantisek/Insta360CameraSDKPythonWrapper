@@ -1,5 +1,15 @@
 import build.insta360 as insta360
 import time
+import os
+
+def progress(current, total):
+    """Callback function for the download progress"""
+    percent = (current / total) * 100
+    print(f"Downloading file: {round(percent, 3)} %")
+
+# Config
+data_dir = "/tmp/Insta360Data"
+os.makedirs(data_dir, exist_ok=True)
 
 discovery = insta360.DeviceDiscovery()
 devices = discovery.get_available_devices()
@@ -29,6 +39,13 @@ if devices:
     new_files = list(set(cam_files2) - set(cam_files1))
     print(f"New files created: {new_files}")
 
+    if input("Write one if you want to download the new files: ") == str(1):
+        for file in new_files:
+            file_name = os.path.basename(file)
+            local_file = os.path.join(data_dir, file_name)
+
+            cam.download_file(file, local_file, progress)
+    
     cam.close()
 
 else:

@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/functional.h>
 
 #include <camera/camera.h>
 #include <camera/device_discovery.h>
@@ -56,5 +57,6 @@ PYBIND11_MODULE(insta360, m) {
         .def("start_recording", &Camera::StartRecording)
         .def("stop_recording", &Camera::StopRecording)
         .def("get_camera_files_list", &Camera::GetCameraFilesList)
-        .def("is_connected", &Camera::IsConnected);
+        .def("is_connected", &Camera::IsConnected)
+        .def("download_file", &Camera::DownloadCameraFile);
 }
