@@ -1,4 +1,4 @@
-import build.insta360 as insta360
+import build.camerasdk as insta360
 import time
 import os
 

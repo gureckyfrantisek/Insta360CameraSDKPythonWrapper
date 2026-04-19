@@ -22,19 +22,19 @@ find_library(CAMERA_SDK_LIB
 )
 
 # Output module
-pybind11_add_module(insta360 wrapper.cpp)
+pybind11_add_module(camerasdk wrapper.cpp)
 
 # Headers target
-target_include_directories(insta360 PRIVATE
+target_include_directories(camerasdk PRIVATE
     ${SDK_INCLUDE_DIR}
 )
 
 # Libraries target
-target_link_directories(insta360 PRIVATE
+target_link_directories(camerasdk PRIVATE
     ${SDK_LIB_DIR}
 )
 
-target_link_libraries(insta360 PRIVATE
+target_link_libraries(camerasdk PRIVATE
     pybind11::module
     ${CAMERA_SDK_LIB}
 )

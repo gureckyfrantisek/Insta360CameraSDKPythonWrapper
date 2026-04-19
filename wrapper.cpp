@@ -9,7 +9,7 @@
 namespace py = pybind11;
 using namespace ins_camera;
 
-PYBIND11_MODULE(insta360, m) {
+PYBIND11_MODULE(camerasdk, m) {
     m.doc() = "Insta360 SDK Python bindings";
 
     // Enums
@@ -51,24 +51,24 @@ PYBIND11_MODULE(insta360, m) {
 
     // Camera
     py::class_<Camera, std::shared_ptr<Camera>>(m, "Camera")
-        .def(py::init<const DeviceConnectionInfo&>())
-        .def("open", &Camera::Open)
-        .def("close", &Camera::Close)
-        .def("take_photo", &Camera::TakePhoto)
-        .def("start_recording", &Camera::StartRecording)
-        .def("stop_recording", &Camera::StopRecording)
-        .def("delete_file", &Camera::DeleteCameraFile)
-        .def("download_file", &Camera::DownloadCameraFile)
-        .def("get_camera_files_list", &Camera::GetCameraFilesList)
-        .def("sync_local_time_to_camera", &Camera::SyncLocalTimeToCamera)
-        .def("is_connected", &Camera::IsConnected)
-        .def("get_media_time", &Camera::GetCameraMediaTime)
-        .def("get_preview_param", &Camera::GetPreviewParam)
-        .def("get_offset", &Camera::GetCameraOffset)
-        .def("shutdown_camera", &Camera::ShutdownCamera)
-        .def("set_battery_low_notification", &Camera::SetBatteryLowNotification)
-        .def("set_storage_full_notification", &Camera::SetStorageFullNotification)
-        .def("set_capture_stopped_notification", &Camera::SetCaptureStoppedNotification)
-        .def("set_temperature_high_notification", &Camera::SetTemperatureHighNotification)
-        .def("set_capture_state_notification", &Camera::SetCaptureStateNotification);
+    .def(py::init<const DeviceConnectionInfo&>())
+    .def("open", &Camera::Open, py::call_guard<py::gil_scoped_release>())
+    .def("close", &Camera::Close, py::call_guard<py::gil_scoped_release>())
+    .def("take_photo", &Camera::TakePhoto, py::call_guard<py::gil_scoped_release>())
+    .def("start_recording", &Camera::StartRecording, py::call_guard<py::gil_scoped_release>())
+    .def("stop_recording", &Camera::StopRecording, py::call_guard<py::gil_scoped_release>())
+    .def("delete_file", &Camera::DeleteCameraFile, py::call_guard<py::gil_scoped_release>())
+    .def("download_file", &Camera::DownloadCameraFile, py::call_guard<py::gil_scoped_release>())
+    .def("get_camera_files_list", &Camera::GetCameraFilesList, py::call_guard<py::gil_scoped_release>())
+    .def("sync_local_time_to_camera", &Camera::SyncLocalTimeToCamera, py::call_guard<py::gil_scoped_release>())
+    .def("is_connected", &Camera::IsConnected)
+    .def("get_media_time", &Camera::GetCameraMediaTime)
+    .def("get_preview_param", &Camera::GetPreviewParam)
+    .def("get_offset", &Camera::GetCameraOffset)
+    .def("shutdown_camera", &Camera::ShutdownCamera, py::call_guard<py::gil_scoped_release>())
+    .def("set_battery_low_notification", &Camera::SetBatteryLowNotification)
+    .def("set_storage_full_notification", &Camera::SetStorageFullNotification)
+    .def("set_capture_stopped_notification", &Camera::SetCaptureStoppedNotification)
+    .def("set_temperature_high_notification", &Camera::SetTemperatureHighNotification)
+    .def("set_capture_state_notification", &Camera::SetCaptureStateNotification);
 }
